@@ -28,10 +28,10 @@ const bingoButtons = [
   { enabled: true, url: "https://s-beta.kobojo.com/mutants/gameconfig/morphology/morphology_season_10.xml?v=2", icon: "../IMG/morphology_season_10.png", name: "Investigación IX" },
   { enabled: true, url: "https://s-beta.kobojo.com/mutants/gameconfig/morphology/morphology_season_11.xml?v=2", icon: "../IMG/morphology_season_11.png", name: "Investigación X" },
   { enabled: false, url: "https://s-beta.kobojo.com/mutants/gameconfig/morphology/morphology_season_12.xml?v=2", icon: "../IMG/morphology_season_12.png", name: "Investigación XI" },
-  { enabled: false, url: "https://cofye.github.io/MGG-PNG/DATA/BINGOS/morphology_season_13.xml?v=2", icon: "../IMG/morphology_season_13.png", name: "Investigación XII" },
-  { enabled: false, url: "https://cofye.github.io/MGG-PNG/DATA/BINGOS/morphology_season_14.xml?v=2", icon: "../IMG/morphology_season_14.png", name: "Investigación XIII" },
-  { enabled: false, url: "https://cofye.github.io/MGG-PNG/DATA/BINGOS/morphology_season_15.xml?v=2", icon: "../IMG/morphology_season_15.png", name: "Investigación XIV" },
-  { enabled: false, url: "https://cofye.github.io/MGG-PNG/DATA/BINGOS/morphology_season_99.xml?v=2", icon: "../IMG/morphology_season_99.png", name: "Investigación Indefinida" },
+  { enabled: false, url: "https://mgg-animator.github.io/MGG-PNG/DATA/BINGOS/morphology_season_13.xml?v=2", icon: "../IMG/morphology_season_13.png", name: "Investigación XII" },
+  { enabled: false, url: "https://mgg-animator.github.io/MGG-PNG/DATA/BINGOS/morphology_season_14.xml?v=2", icon: "../IMG/morphology_season_14.png", name: "Investigación XIII" },
+  { enabled: false, url: "https://mgg-animator.github.io/MGG-PNG/DATA/BINGOS/morphology_season_15.xml?v=2", icon: "../IMG/morphology_season_15.png", name: "Investigación XIV" },
+  { enabled: false, url: "https://mgg-animator.github.io/MGG-PNG/DATA/BINGOS/morphology_season_99.xml?v=2", icon: "../IMG/morphology_season_99.png", name: "Investigación Indefinida" },
   { enabled: true, url: "https://s-beta.kobojo.com/mutants/gameconfig/morphology/morphology_reactor_1.xml?v=2", icon: "../IMG/morphology_reactor_1.png", name: "Reactor I" },
   { enabled: true, url: "https://s-beta.kobojo.com/mutants/gameconfig/morphology/morphology_legendary.xml?v=2", icon: "../IMG/morphology_legendary.png", name: "Legendarios" },
   { enabled: true, url: "https://s-beta.kobojo.com/mutants/gameconfig/morphology/morphology_zodiac.xml?v=2", icon: "../IMG/morphology_zodiac.png", name: "Zodiaco" },
@@ -72,8 +72,8 @@ const bingoButtons = [
   { enabled: true, url: "https://s-beta.kobojo.com/mutants/gameconfig/morphology/morphology_2026_mutants.xml?v=2", icon: "../IMG/morphology_2026_mutants.png", name: "Mutantes 2026" },
   { enabled: true, url: "https://s-beta.kobojo.com/mutants/gameconfig/morphology/morphology_2026_events.xml?v=2", icon: "../IMG/morphology_2026_events.png", name: "Eventos 2026" },
   { enabled: false, url: "https://s-beta.kobojo.com/mutants/gameconfig/morphology/morphology_anniversary26.xml?v=2", icon: "../IMG/morpho_hexcity.png", name: "13° Aniversario" },
-  { enabled: false, url: "https://cofye.github.io/MGG-PNG/DATA/BINGOS/morphology_monogene_1.xml?v=2", icon: "../IMG/morphology_monogen.png", name: "Monogen 1" },
-  { enabled: false, url: "https://cofye.github.io/MGG-PNG/DATA/BINGOS/morphology_monogene_2.xml?v=2", icon: "../IMG/morphology_monogen.png", name: "Monogen 2" },
+  { enabled: false, url: "https://mgg-animator.github.io/MGG-PNG/DATA/BINGOS/morphology_monogene_1.xml?v=2", icon: "../IMG/morphology_monogen.png", name: "Monogen 1" },
+  { enabled: false, url: "https://mgg-animator.github.io/MGG-PNG/DATA/BINGOS/morphology_monogene_2.xml?v=2", icon: "../IMG/morphology_monogen.png", name: "Monogen 2" },
 ];
 
 function renderBingoButtons() {
