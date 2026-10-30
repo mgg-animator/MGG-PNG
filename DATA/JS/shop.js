@@ -1,5 +1,5 @@
-const SHOP_ITEMS_URL = "https://s-beta.kobojo.com/mutants/gameconfig/shopitems.xml";
-const LOCALISATION_URL = "https://s-beta.kobojo.com/mutants/gameconfig/localisation_es.txt";
+const SHOP_ITEMS_URL = "https://s-beta.kobojo.com/mutants/gameconfig/shopitems.xml?v=Date.now()";
+const LOCALISATION_URL = "https://s-beta.kobojo.com/mutants/gameconfig/localisation_es.txt?v=Date.now()";
 const ASSET_BASE_URL = "https://s-beta.kobojo.com/mutants/assets/";
 const DEFAULT_BACKGROUND_URL = `${ASSET_BASE_URL}hud/shop/fx_item_hc.png`;
 const PRICE_BAR_URLS = {
