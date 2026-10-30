@@ -1,0 +1,155 @@
+@font-face {
+  font-family: 'Bahnschrift';
+  src: url('../FONT/bahnschrift.ttf') format('truetype');
+  font-stretch: semi-condensed;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  padding: 0;
+  background-image: url(../IMG/background.png);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #182b44;
+}
+::-webkit-scrollbar-thumb {
+  background: #4881c2;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #759fcf ;
+}
+
+.shop-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  margin-left: 50px;
+}
+
+.item {
+  display: flex;
+  justify-content: center;
+  height: 470px;
+  width: 300px;
+  position: relative;
+}
+
+.item > * {
+  position: absolute;
+  top: 35px;
+}
+
+.background {
+  position: absolute;
+}
+
+.mutant {
+  top: 130px;
+}
+
+.platform {
+  top: 265px;
+}
+
+.priceBar {
+  top: 357px;
+}
+
+.tag {
+  height: 70px;
+  margin-right: 230px;
+  top: 40px;
+}
+
+.name {
+  font-family: 'Bahnschrift', sans-serif;
+  font-stretch: semi-condensed;
+  font-weight: 700;
+  transform: scale(1.4, 2);
+  display: inline-block;
+  letter-spacing: -0.5px;
+  color: #fff;
+  text-shadow:
+    -1px 0 0 #000,
+    1px 0px 0 #000,
+    0 -1px 0 #000,
+    0 1px 0 #000,
+    -1px -1px 0 #000,
+    -1px  1px 0 #000,
+    1px -1px 0 #000,
+    1px  1px 0 #000;
+  transform-origin: center center;
+  top: 12px;
+}
+
+.price {
+  font-family: 'Bahnschrift', sans-serif;
+  font-stretch: semi-condensed;
+  font-weight: 700;
+  transform: scale(1.4, 2);
+  display: inline-block;
+  letter-spacing: -0.5px;
+  color: #fff;
+  text-shadow:
+    -1px 0 0 #000,
+    1px 0px 0 #000,
+    0 -1px 0 #000,
+    0 1px 0 #000,
+    -1px -1px 0 #000,
+    -1px  1px 0 #000,
+    1px -1px 0 #000,
+    1px  1px 0 #000;
+  transform-origin: center center;
+  top: 383px;
+  margin-left: -40px;
+}
+
+.price_rc {
+  font-family: 'Bahnschrift', sans-serif;
+  font-stretch: semi-condensed;
+  font-weight: 700;
+  transform: scale(1.4, 2);
+  display: inline-block;
+  letter-spacing: -0.5px;
+  color: #fff;
+  text-shadow:
+    -1px 0 0 #000,
+    1px 0px 0 #000,
+    0 -1px 0 #000,
+    0 1px 0 #000,
+    -1px -1px 0 #000,
+    -1px  1px 0 #000,
+    1px -1px 0 #000,
+    1px  1px 0 #000;
+  transform-origin: center center;
+  top: 383px;
+}
+
+.extra {
+  font-family: 'Bahnschrift', sans-serif;
+  font-stretch: semi-condensed;
+  font-weight: 700;
+  transform: scale(1.4, 2);
+  display: inline-block;
+  letter-spacing: -0.5px;
+  color: #000;
+  transform-origin: center center;
+  top: 435px;
+}
+
+.shop-error {
+  color: #fff;
+  font-family: 'Bahnschrift', sans-serif;
+}
