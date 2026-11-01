@@ -38,42 +38,53 @@ body {
   margin-left: 50px;
 }
 
-.item {
+.shop-item {
   display: flex;
   justify-content: center;
+  align-items: center;
   height: 470px;
   width: 300px;
   position: relative;
 }
 
-.item > * {
+.shop-item > * {
   position: absolute;
+}
+
+.item-background {
   top: 35px;
 }
 
-.background {
-  position: absolute;
+.item-thumbnails {
+  transform: translate(0, -25px);
 }
 
-.mutant {
-  top: 130px;
-}
-
-.platform {
+.item-platform {
   top: 265px;
 }
 
-.priceBar {
+.item-priceBar {
   top: 357px;
 }
 
-.tag {
+.item-tag {
   height: 70px;
   margin-right: 230px;
   top: 40px;
 }
 
-.name {
+.item-info {
+  height: 50px;
+  right: 0px;
+  top: 420px;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+.item-info:hover {
+  transform: scale(1.1);
+}
+
+.item-name {
   font-family: 'Bahnschrift', sans-serif;
   font-stretch: semi-condensed;
   font-weight: 700;
@@ -94,7 +105,7 @@ body {
   top: 12px;
 }
 
-.price {
+.item-price {
   font-family: 'Bahnschrift', sans-serif;
   font-stretch: semi-condensed;
   font-weight: 700;
@@ -116,7 +127,7 @@ body {
   margin-left: -40px;
 }
 
-.price_rc {
+.item-price_rc {
   font-family: 'Bahnschrift', sans-serif;
   font-stretch: semi-condensed;
   font-weight: 700;
@@ -137,7 +148,7 @@ body {
   top: 383px;
 }
 
-.extra {
+.item-extra {
   font-family: 'Bahnschrift', sans-serif;
   font-stretch: semi-condensed;
   font-weight: 700;
@@ -152,4 +163,122 @@ body {
 .shop-error {
   color: #fff;
   font-family: 'Bahnschrift', sans-serif;
+}
+
+.shop-item-content {
+  top: 35px;
+  height: 350px;
+  width: 350px;
+  background: #1d1d1d;
+  border: 2.5px solid #444;
+  border-radius: 6px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 5px;
+}
+
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  width: 350px;
+  padding-right: 50px;
+  margin-top: 10px;
+  min-height: 60px;
+  align-items: center;
+  gap: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  background: #333;
+}
+
+.object {
+  height: 60px;
+  max-width: 60px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.thumbnail {
+  max-height: 60px;
+  max-width: 60px;
+}
+.star {
+  position: absolute;
+  height: 50px;
+  margin-left: 60px;
+}
+.skin {
+  position: absolute;
+  height: 50px;
+  margin-left: -60px;
+}
+.amount {
+  position: absolute;
+  font-family: 'Bahnschrift', sans-serif;
+  font-stretch: semi-condensed;
+  font-weight: 700;
+  transform: scale(0.7, 1);
+  display: inline-block;
+  letter-spacing: -0.5px;
+  color: #fff;
+  text-shadow:
+    -1px 0 0 #000,
+    1px 0px 0 #000,
+    0 -1px 0 #000,
+    0 1px 0 #000,
+    -1px -1px 0 #000,
+    -1px  1px 0 #000,
+    1px -1px 0 #000,
+    1px  1px 0 #000;
+  transform-origin: center center;
+  margin-top: 50px;
+  width: 100px;
+  text-align: center;
+}
+
+.description {
+  font-family: 'Bahnschrift', sans-serif;
+
+  font-weight: 700;
+  transform: scale(0.7, 1);
+  display: inline-block;
+  letter-spacing: -0.5px;
+  color: #fff;
+  text-shadow:
+    -1px 0 0 #000,
+    1px 0px 0 #000,
+    0 -1px 0 #000,
+    0 1px 0 #000,
+    -1px -1px 0 #000,
+    -1px  1px 0 #000,
+    1px -1px 0 #000,
+    1px  1px 0 #000;
+  transform-origin: center center;
+  width: 490px;
+  margin-left: -75px;
+  text-align: center;
+}
+
+.plus {
+  height: 20px;
+}
+
+.chance {
+  position: absolute;
+  font-family: 'Bahnschrift', sans-serif;
+  font-stretch: semi-condensed;
+  font-weight: 700;
+  transform: scale(1.4, 2);
+  display: inline-block;
+  letter-spacing: -0.5px;
+  color: #fff;
+  transform-origin: center right;
+  right: 10px;
+}
+
+.hidden {
+  display: none !important;
 }

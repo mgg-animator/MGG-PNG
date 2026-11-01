@@ -1,7 +1,19 @@
-const SHOP_ITEMS_URL = "https://s-beta.kobojo.com/mutants/gameconfig/shopitems.xml?v=Date.now()";
-const LOCALISATION_URL = "https://s-beta.kobojo.com/mutants/gameconfig/localisation_es.txt?v=Date.now()";
+const SHOP_ITEMS_URL = "https://s-beta.kobojo.com/mutants/gameconfig/shopitems.xml";
+const LOCALISATION_URL = "https://s-beta.kobojo.com/mutants/gameconfig/localisation_es.txt";
 const ASSET_BASE_URL = "https://s-beta.kobojo.com/mutants/assets/";
 const DEFAULT_BACKGROUND_URL = `${ASSET_BASE_URL}hud/shop/fx_item_hc.png`;
+const SKIN_STARS = {
+  bronze: "1",
+  silver: "2",
+  gold: "3",
+  platinum: "4"
+};
+const STAR_SKINS = {
+  "1": "bronze",
+  "2": "silver",
+  "3": "gold",
+  "4": "platinum"
+};
 const PRICE_BAR_URLS = {
   hardcurrency: "../IMG/shop_bar_hc.png",
   softcurrency: "../IMG/shop_bar_sc.png",
@@ -9,7 +21,7 @@ const PRICE_BAR_URLS = {
 };
 
 function getTagValue(item, key) {
-  const tags = item.getElementsByTagName("Tag");
+  const tags = Array.from(item.children).filter(child => child.tagName === "Tag");
   for (const tag of tags) {
     if (tag.getAttribute("key") === key) {
       return tag.getAttribute("value");
@@ -39,6 +51,20 @@ function createImage(className, source, alt = "") {
   return image;
 }
 
+function appendLocalizedText(element, text) {
+  const lines = text.split(/\\n|\r?\n/);
+  lines.forEach((line, index) => {
+    if (index > 0) {
+      element.append(document.createElement("br"));
+    }
+    element.append(document.createTextNode(line));
+  });
+}
+
+function getLocalizedValue(localisation, key, fallback = "") {
+  return localisation.get((key || "").toLowerCase()) || fallback;
+}
+
 function getItemPicture(item) {
   let picture = item.getAttribute("picture");
   if (!picture) {
@@ -58,20 +84,20 @@ function getItemPicture(item) {
     }
   }
 
-  return picture;
+  return picture.toLowerCase().startsWith("specimen") ? picture.toLowerCase() : picture;
 }
 
 function createItemCard(item, localisation) {
   const card = document.createElement("div");
-  card.className = "item";
+  card.className = "shop-item";
 
   const itemName = item.getAttribute("itemId");
-  const displayName = localisation.get(itemName)
-    || localisation.get(`${itemName}_payment_text`)
+  const displayName = getLocalizedValue(localisation, itemName)
+    || getLocalizedValue(localisation, `${itemName}_payment_text`)
     || itemName;
   const background = getTagValue(item, "bg");
   card.append(createImage(
-    "background",
+    "item-background",
     background
       ? `${ASSET_BASE_URL}hud/shop/fx_item_hc_${background}.png`
       : DEFAULT_BACKGROUND_URL
@@ -79,20 +105,19 @@ function createItemCard(item, localisation) {
 
   const picture = getItemPicture(item);
   if (picture) {
-    const isSpecimen = picture.toLowerCase().startsWith("specimen");
     card.append(createImage(
-      isSpecimen ? "mutant" : "object",
+      "item-thumbnails",
       `${ASSET_BASE_URL}thumbnails/${picture}.png`,
       itemName
     ));
 
-    if (isSpecimen) {
+    if (picture.startsWith("specimen")) {
       const article = item.getElementsByTagName("ArticleItem")[0];
       const typeId = article?.getAttribute("typeId") || "";
       const gene = typeId.match(/^Specimen_([A-Za-z])/i)?.[1];
       if (gene) {
         card.append(createImage(
-          "platform",
+          "item-platform",
           `${ASSET_BASE_URL}hud/shop/flap/base_${gene.toLowerCase()}_big.png`
         ));
       }
@@ -102,7 +127,7 @@ function createItemCard(item, localisation) {
   const offerTag = item.getAttribute("offerTag") || item.getAttribute("offertag");
   if (offerTag) {
     card.append(createImage(
-      "tag",
+      "item-tag",
       `${ASSET_BASE_URL}offertags/${offerTag.replace(/\$\$/g, "-es")}.png`
     ));
   }
@@ -127,30 +152,186 @@ function createItemCard(item, localisation) {
   }
 
   if (priceBar) {
-    card.append(createImage("priceBar", priceBar));
+    card.append(createImage("item-priceBar", priceBar));
   }
 
   const nameElement = document.createElement("span");
-  nameElement.className = "name";
-  nameElement.textContent = displayName;
+  nameElement.className = "item-name";
+  appendLocalizedText(nameElement, displayName);
   card.append(nameElement);
 
   if (price) {
     const priceElement = document.createElement("span");
-    priceElement.className = priceClass;
+    priceElement.className = priceClass === "price_rc" ? "item-price_rc" : "item-price";
     priceElement.textContent = price;
     card.append(priceElement);
   }
 
   const allowedPurchases = getTagValue(item, "purchasesAllowed");
   const extraElement = document.createElement("span");
-  extraElement.className = "extra";
+  extraElement.className = "item-extra";
   extraElement.textContent = allowedPurchases
     ? `${allowedPurchases} ${allowedPurchases === "1" ? "compra" : "compras"}`
     : "Compras Ilimitadas";
   card.append(extraElement);
 
+  const infoButton = createImage("item-info", "../IMG/btn_info.png", "Mostrar contenido");
+  infoButton.tabIndex = 0;
+  infoButton.setAttribute("role", "button");
+  card.append(infoButton);
+
+  const content = document.createElement("div");
+  content.className = "shop-item-content hidden";
+  const contentId = `shop-item-content-${itemName.replace(/[^a-zA-Z0-9_-]/g, "-")}-${createItemCard.nextId++}`;
+  content.id = contentId;
+  infoButton.setAttribute("aria-controls", contentId);
+  infoButton.setAttribute("aria-expanded", "false");
+  appendItemContent(content, item, localisation);
+  card.append(content);
+
   return card;
+}
+
+createItemCard.nextId = 0;
+
+function getArticleItems(item) {
+  return Array.from(item.getElementsByTagName("ArticleItems")[0]?.children || [])
+    .filter(article => article.tagName === "ArticleItem");
+}
+
+function getArticleTagValue(article, key) {
+  const tags = Array.from(article.children).filter(child => child.tagName === "Tag");
+  return tags.find(tag => tag.getAttribute("key") === key)?.getAttribute("value") || "";
+}
+
+function createArticleObject(article) {
+  const object = document.createElement("div");
+  object.className = "object";
+
+  const typeId = (article.getAttribute("typeId") || "").trim();
+  const normalizedType = typeId.toLowerCase();
+  const isSpecimen = normalizedType.startsWith("specimen");
+  const skin = getArticleTagValue(article, "skin").toLowerCase();
+  let thumbnailUrl = "";
+
+  if (normalizedType === "hardcurrency" || normalizedType === "softcurrency") {
+    thumbnailUrl = `../IMG/${normalizedType}.png`;
+  } else if (typeId) {
+    const thumbnailPath = isSpecimen
+      ? `thumbnails/${normalizedType}`
+      : `mobile/thumbnails/${normalizedType}`;
+    thumbnailUrl = `${ASSET_BASE_URL}${thumbnailPath}.png`;
+    if (isSpecimen && skin) {
+      thumbnailUrl = `${ASSET_BASE_URL}${thumbnailPath}_${skin}.png`;
+    }
+  }
+
+  if (thumbnailUrl) {
+    object.append(createImage("thumbnail", thumbnailUrl, typeId));
+  }
+
+  if (isSpecimen && skin && !Object.prototype.hasOwnProperty.call(SKIN_STARS, skin)) {
+    object.append(createImage("skin", `../IMG/icon_${skin}.png`, skin));
+  }
+
+  if (isSpecimen) {
+    const starValue = getArticleTagValue(article, "star")
+      || getArticleTagValue(article, "stars")
+      || SKIN_STARS[skin];
+    const starSkin = STAR_SKINS[starValue];
+    if (starSkin) {
+      object.append(createImage("star", `../IMG/star_${starSkin}.png`, `${starSkin} star`));
+    }
+  }
+
+  const amount = article.getAttribute("amount");
+  if (amount) {
+    const amountElement = document.createElement("span");
+    amountElement.className = "amount";
+    amountElement.textContent = `x${formatAmount(amount)}`;
+    object.append(amountElement);
+  }
+
+  return object;
+}
+
+function getArticleGroups(item) {
+  const articles = getArticleItems(item);
+  const hasOptions = articles.some(article => getArticleTagValue(article, "option"));
+  if (!hasOptions) {
+    return articles.length ? [{ option: "", articles }] : [];
+  }
+
+  const groups = new Map();
+  articles.forEach((article, index) => {
+    const option = getArticleTagValue(article, "option");
+    const key = option || `__without_option_${index}`;
+    if (!groups.has(key)) {
+      groups.set(key, { option, articles: [] });
+    }
+    groups.get(key).articles.push(article);
+  });
+  return Array.from(groups.values());
+}
+
+function getGroupWeights(item, groups) {
+  const randomTags = Array.from(item.children)
+    .filter(child => child.tagName === "Tag" && child.getAttribute("key").startsWith("rand_"));
+  const weights = groups.map(group => {
+    if (!group.option) {
+      return 0;
+    }
+    const randomTag = randomTags.find(tag =>
+      tag.getAttribute("key").slice(5).toLowerCase() === group.option.toLowerCase()
+    );
+    const weight = Number(randomTag?.getAttribute("value"));
+    return Number.isFinite(weight) && weight > 0 ? weight : 0;
+  });
+  const total = randomTags.reduce((sum, tag) => {
+    const weight = Number(tag.getAttribute("value"));
+    return Number.isFinite(weight) && weight > 0 ? sum + weight : sum;
+  }, 0);
+  return { weights, total };
+}
+
+function appendItemContent(content, item, localisation) {
+  const caption = item.getAttribute("caption");
+  if (caption) {
+    const description = document.createElement("span");
+    description.className = "description";
+    appendLocalizedText(
+      description,
+      getLocalizedValue(localisation, caption, caption)
+    );
+    content.append(description);
+  }
+
+  const groups = getArticleGroups(item);
+  const { weights, total } = getGroupWeights(item, groups);
+  groups.forEach((group, groupIndex) => {
+    const groupElement = document.createElement("div");
+    groupElement.className = "item";
+
+    group.articles.forEach((article, articleIndex) => {
+      if (articleIndex > 0) {
+        groupElement.append(createImage("plus", "../IMG/plus.png", "más"));
+      }
+      groupElement.append(createArticleObject(article));
+    });
+
+    const chance = document.createElement("span");
+    chance.className = "chance";
+    const percentage = groups.length === 1 && !group.option
+      ? 100
+      : total
+      ? weights[groupIndex] / total * 100
+      : groups.length === 1 ? 100 : null;
+    if (percentage !== null) {
+      chance.textContent = `${Number(percentage.toFixed(2))}%`;
+      groupElement.append(chance);
+    }
+    content.append(groupElement);
+  });
 }
 
 async function loadShopItems() {
@@ -177,6 +358,27 @@ async function loadShopItems() {
   }
 
   shopBlock.replaceChildren(fragment);
+  shopBlock.addEventListener("click", event => {
+    const infoButton = event.target.closest?.(".item-info");
+    if (infoButton) {
+      toggleItemContent(infoButton);
+    }
+  });
+  shopBlock.addEventListener("keydown", event => {
+    if ((event.key === "Enter" || event.key === " ") && event.target.matches?.(".item-info")) {
+      event.preventDefault();
+      toggleItemContent(event.target);
+    }
+  });
+}
+
+function toggleItemContent(infoButton) {
+  const content = infoButton.parentElement.querySelector(".shop-item-content");
+  if (!content) {
+    return;
+  }
+  const isExpanded = content.classList.toggle("hidden") === false;
+  infoButton.setAttribute("aria-expanded", String(isExpanded));
 }
 
 async function fetchText(url, fileName) {
@@ -198,7 +400,7 @@ function parseLocalisation(text) {
     const key = line.slice(0, separator).trim();
     const value = line.slice(separator + 1).trim();
     if (key && value) {
-      localisation.set(key, value);
+      localisation.set(key.toLowerCase(), value);
     }
   }
   return localisation;
