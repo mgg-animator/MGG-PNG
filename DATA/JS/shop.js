@@ -84,7 +84,7 @@ function getItemPicture(item) {
     }
   }
 
-  return picture.toLowerCase().startsWith("specimen") ? picture.toLowerCase() : picture;
+  return picture.toLowerCase();
 }
 
 function createItemCard(item, localisation) {
@@ -245,7 +245,7 @@ function createArticleObject(article) {
   }
 
   const amount = article.getAttribute("amount");
-  if (amount) {
+  if (amount && Number(amount) !== 1) {
     const amountElement = document.createElement("span");
     amountElement.className = "amount";
     amountElement.textContent = `x${formatAmount(amount)}`;
